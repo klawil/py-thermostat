@@ -24,7 +24,7 @@ def update_rooms():
     try:
       r = requests.get(
         'http://{}:5000/api/temp'.format(room['ip']),
-        timeout=0.1
+        timeout=0.5
       )
 
       resp = r.json()
