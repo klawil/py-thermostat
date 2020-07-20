@@ -18,6 +18,8 @@
 # https://www.raspberrypi-spy.co.uk/
 #
 #--------------------------------------
+import logging
+
 try:
   import smbus
   import time
@@ -160,6 +162,8 @@ try:
   def isValid():
     return True
 except:
+  logging.exception('message')
+
   def readBME280All():
     return 23, 0, 0
 
