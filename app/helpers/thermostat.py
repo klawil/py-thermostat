@@ -170,28 +170,24 @@ def implement_state(new_state):
   db = get_db()
 
   try:
-    from gpiozero import LED
+    global GPIO
+    import RPi.GPIO as GPIO
   except:
-    class LED:
-      def __init__(self, pin):
-        self.pin = pin
-
-      def on(self):
-        print('Turning on {}'.format(self.pin))
-
-      def off(self):
-        print('Turning off {}'.format(self.pin))
-
     print('Failed to import pi library')
+    return
+
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setwarnings(False)
 
   pins = db.execute('SELECT * FROM pins').fetchall()
   for pin in pins:
     if pin['name'] in new_state:
-      control = LED(pin['pin'])
+
+      GPIO.setup(pin['pin'], GPIO.OUT)
       if new_state[pin['name']]:
-        control.on()
+        GPIO.output(pin['pin'], GPIO.LOW)
       else:
-        control.off()
+        GPIO.output(pin['pin'], GPIO.HIGH)
     else:
       print('{} not found in new state'.format(pin['name']))
 
