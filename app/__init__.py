@@ -1,6 +1,5 @@
 import os
-import json
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from .helpers import database, thermostat, bme280
 
 def create_app(test_config=None):
@@ -33,10 +32,19 @@ def create_app(test_config=None):
     if app.env != 'development' and not bme280.isValid():
       return 'No valid BME280 present', 500
 
-    return json.dumps({
+    return jsonify({
       'temp': temp,
       'pressure': pressure,
       'humidity': humidity
     })
+
+  @app.route('/api/state')
+  def get_current_state():
+    db = database.get_db()
+
+    state = db.execute('SELECT * FROM currentState').fetchone()
+    state['rooms'] = db.execute('SELECT * FROM rooms').fetchall()
+
+    return jsonify(state)
 
   return app
