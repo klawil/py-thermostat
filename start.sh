@@ -1,5 +1,3 @@
 #!/bin/bash
 
-export FLASK_APP=app
-
-flask run
+waitress-serve --port=5000 --call 'app:create_app'
