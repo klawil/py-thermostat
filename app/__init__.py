@@ -1,6 +1,7 @@
 import os
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from .helpers import database, thermostat, bme280
+from .routes import api, pages
 
 def create_app(test_config=None):
   # Create and configure the app
@@ -25,26 +26,7 @@ def create_app(test_config=None):
   database.init_app(app)
   thermostat.init_app(app)
 
-  @app.route('/api/temp')
-  def get_current_temp():
-    temp, pressure, humidity = bme280.readBME280All()
-
-    if app.env != 'development' and not bme280.isValid():
-      return 'No valid BME280 present', 500
-
-    return jsonify({
-      'temp': temp,
-      'pressure': pressure,
-      'humidity': humidity
-    })
-
-  @app.route('/api/state')
-  def get_current_state():
-    db = database.get_db()
-
-    state = db.execute('SELECT * FROM currentState').fetchone()
-    state['rooms'] = db.execute('SELECT * FROM rooms').fetchall()
-
-    return jsonify(state)
+  app.register_blueprint(api.bp)
+  app.register_blueprint(pages.bp)
 
   return app

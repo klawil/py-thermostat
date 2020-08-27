@@ -69,6 +69,16 @@ def update_rooms():
 
   return room_data
 
+def get_room_data():
+  db = get_db()
+  rooms = db.execute('SELECT * FROM rooms').fetchall()
+  room_data = {}
+
+  for room in rooms:
+    room_data[room['name']] = room['currentTemp']
+
+  return room_data
+
 # Get the target temperature and room
 def get_target_temp():
   db = get_db()
@@ -115,11 +125,24 @@ def get_desired_state(room_temps, target, current_state):
     'ac': False,
     'heat': False,
     'fanLow': True,
-    'fanHigh': False
+    'fanHigh': False,
+    'tempMin': None,
+    'tempMax': None
   }
   if target is None:
     print('No target')
     return desiredState
+
+  if target['name'] == 'Override' and target['tempMin'] is None:
+    print('Override')
+    target['tempMin'] = current_state['tempMin']
+    target['tempMax'] = current_state['tempMax']
+    return target
+  elif target['name'] == 'Override':
+    target['defaultFan'] = False
+
+  desiredState['tempMin'] = target['tempMin']
+  desiredState['tempMax'] = target['tempMax']
 
   if target['targetRoom'] not in room_temps or room_temps[target['targetRoom']] is None:
     for room in room_temps:
@@ -169,6 +192,18 @@ def are_changes_present(current_state, desired_state):
 def implement_state(new_state):
   db = get_db()
 
+  # Save the state
+  db.execute('UPDATE currentState SET name = ?, ac = ?, heat = ?, fanLow = ?, fanHigh = ?, tempMin = ?, tempMax = ?', (
+    new_state['name'],
+    new_state['ac'],
+    new_state['heat'],
+    new_state['fanLow'],
+    new_state['fanHigh'],
+    new_state['tempMin'],
+    new_state['tempMax']
+  ))
+  db.commit()
+
   try:
     global GPIO
     import RPi.GPIO as GPIO
@@ -191,23 +226,9 @@ def implement_state(new_state):
     else:
       print('{} not found in new state'.format(pin['name']))
 
-  # Save the state
-  db.execute('UPDATE currentState SET name = ?, ac = ?, heat = ?, fanLow = ?, fanHigh = ?', (
-    new_state['name'],
-    new_state['ac'],
-    new_state['heat'],
-    new_state['fanLow'],
-    new_state['fanHigh']
-  ))
-  db.commit()
+def update_thermostat():
 
-@click.command('update')
-@with_appcontext
-def update_command():
-  """Determine what state the thermostat should be in and update room temperatures"""
-
-  # Update the room temperatures
-  room_data = update_rooms()
+  room_data = get_room_data()
 
   # Determine the target temperature
   target_temp = get_target_temp()
@@ -221,6 +242,16 @@ def update_command():
 
   # Implement the changes
   implement_state(desired_state)
+
+@click.command('update')
+@with_appcontext
+def update_command():
+  """Determine what state the thermostat should be in and update room temperatures"""
+
+  # Update the room temperatures
+  room_data = update_rooms()
+
+  update_thermostat()
 
 def init_app(app):
   app.cli.add_command(update_command)

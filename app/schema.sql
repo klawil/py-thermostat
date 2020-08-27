@@ -31,10 +31,13 @@ CREATE TABLE overrides (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   isEnabled BOOLEAN NOT NULL,
   endsAt INTEGER,
-  targetRoom TEXT,
-  minTemp INTEGER,
-  maxTemp INTEGER,
-  defaultFan BOOLEAN
+  ac BOOLEAN,
+  heat BOOLEAN,
+  fanLow BOOLEAN,
+  fanHigh BOOLEAN,
+  tempMin INTEGER,
+  tempMax INTEGER,
+  targetRoom TEXT
 );
 
 CREATE TABLE currentState (
@@ -43,7 +46,9 @@ CREATE TABLE currentState (
   ac BOOLEAN NOT NULL,
   heat BOOLEAN NOT NULL,
   fanLow BOOLEAN NOT NULL,
-  fanHigh BOOLEAN NOT NULL
+  fanHigh BOOLEAN NOT NULL,
+  tempMin INTEGER,
+  tempMax INTEGER
 );
 
 CREATE TABLE pins (
@@ -52,7 +57,7 @@ CREATE TABLE pins (
 );
 
 INSERT INTO rooms (name, ip) VALUES
-('Living Room', '127.0.0.1'),
+('Living Room', '192.168.85.6'),
 ('Bedroom', '192.168.85.8');
 
 INSERT INTO modes (name, targetRoom, tempMin, tempMax, defaultFan) VALUES

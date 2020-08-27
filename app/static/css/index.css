@@ -1,0 +1,93 @@
+* {
+  cursor: none !important;
+}
+
+.middle {
+  height: calc(100% - 6.25rem - 5px);
+}
+
+.navbar-text {
+  width: 25%;
+}
+
+.room-name {
+  margin-bottom: 1rem;
+}
+
+.room-temp {
+  width: 100%;
+}
+
+.room-gauge {
+  width: 250px;
+  height: 250px;
+  border: 6px solid grey;
+  border-radius: 50%;
+  border-bottom-color: transparent;
+  margin-top: 15px;
+
+  position: relative;
+}
+
+.monospace {
+  font-family: "Lucida Console", Monaco, monospace !important;
+}
+
+#time, #outsideTemp {
+  width: 5rem !important;
+}
+
+.middle-navbar {
+  width: calc(100% - 10rem) !important;
+}
+
+.room-marker.room-current {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.room-marker {
+  width: 6px;
+  margin: 0 9px;
+  height: 24px;
+  background-color: grey;
+  position: absolute;
+}
+
+.bottom button {
+  width: 18%;
+}
+
+.navbar div {
+  padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+  margin-bottom: 0 !important;
+}
+
+.arrow-container {
+  width: 100%;
+  position: relative;
+}
+
+.room-current-text {
+  margin: 0;
+}
+
+.arrow-left, .arrow-right {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.arrow-left {
+  margin-left: 0.5rem;
+  margin-right: calc(50% - 2rem);
+}
+
+.arrow-right {
+  margin-right: 0.5rem;
+  margin-left: calc(50% - 2rem);
+}
+
+.arrow-top {
+  transform: rotate(180deg);
+}

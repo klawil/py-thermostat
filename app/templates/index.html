@@ -1,0 +1,72 @@
+<html>
+<head>
+  <title>Thermostat</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body class="bg-dark">
+  <div class="navbar navbar-dark navbar-expand-lg d-flex justify-content-between bottom-border border-bottom text-center">
+    <div class="navbar-text text-white h5 text-left monospace" id="time">??:??</div>
+    <div class="navbar-text middle-navbar text-white h5" id="mode">Current Mode</div>
+    <div class="navbar-text text-white h5 text-right monospace" id="outsideTemp">??&deg;C</div>
+  </div>
+
+  <div class="d-flex align-items-center container-fluid middle">
+    <div class="w-50 h-100 border-right text-center text-white room d-flex flex-column justify-content-center">
+      <div class="room-name text-white h1" id="room-name-0">Room Name</div>
+      <div class="room-temp text-white d-flex flex-column justify-content-center">
+        <div class="room-gauge align-self-center d-flex flex-column justify-content-center">
+          <div class="room-marker" id="room-min-0"></div>
+          <div class="room-marker" id="room-max-0"></div>
+          <div class="room-marker room-current" id="room-current-0"></div>
+          <div class="h1 monospace" id="room-current-text-0"></div>
+        </div>
+      </div>
+      <div class="align-self-center monospace d-flex flex-column align-items-center">
+        <div class="align-self-center arrow-container">
+          <span class="h3 arrow-left monospace arrow-top" id="room-min-up-0">&#9662;</span>
+          <span class="h3 arrow-right monospace arrow-top" id="room-max-up-0">&#9662;</span>
+        </div>
+        <div class="h2 align-self-center room-current-text" id="room-current-target-0">?? - ??</div>
+        <div class="align-self-center arrow-container">
+          <span class="h3 arrow-left monospace" id="room-min-down-0">&#9662;</span>
+          <span class="h3 arrow-right monospace" id="room-max-down-0">&#9662;</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-50 h-100 border-left text-center text-white room d-flex flex-column justify-content-center">
+      <div class="room-name text-white h1" id="room-name-1">Room Name</div>
+      <div class="room-temp text-white d-flex flex-column justify-content-center">
+        <div class="room-gauge align-self-center d-flex flex-column justify-content-center">
+          <div class="room-marker" id="room-min-1"></div>
+          <div class="room-marker" id="room-max-1"></div>
+          <div class="room-marker room-current" id="room-current-1"></div>
+          <div class="h1 monospace" id="room-current-text-1"></div>
+        </div>
+      </div>
+      <div class="align-self-center monospace d-flex flex-column align-items-center">
+        <div class="align-self-center arrow-container">
+          <span class="h3 arrow-left monospace arrow-top" id="room-min-up-1">&#9662;</span>
+          <span class="h3 arrow-right monospace arrow-top" id="room-max-up-1">&#9662;</span>
+        </div>
+        <div class="h2 align-self-center room-current-text" id="room-current-target-1">?? - ??</div>
+        <div class="align-self-center arrow-container">
+          <span class="h3 arrow-left monospace" id="room-min-down-1">&#9662;</span>
+          <span class="h3 arrow-right monospace" id="room-max-down-1">&#9662;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar navbar-dark navbar-expand-lg d-flex justify-content-between fixed-bottom border-top text-center bottom">
+    <button class="btn" id="ac">A/C</button>
+    <button class="btn" id="fanLow">Fan Low</button>
+    <button class="btn" id="fanHigh">Fan High</button>
+    <button class="btn" id="heat">Heat</button>
+    <button class="btn" id="override">Resume</button>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
