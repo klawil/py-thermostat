@@ -19,8 +19,8 @@
 }
 
 .room-gauge {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   border: 6px solid grey;
   border-radius: 50%;
   border-bottom-color: transparent;

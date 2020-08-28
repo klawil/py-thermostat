@@ -1,4 +1,4 @@
-const GAUGE_RADIUS = (250 / 2) - 3;
+const GAUGE_RADIUS = (200 / 2) - 3;
 const DOT_RADIUS = 12;
 
 const CONTROLS = [
