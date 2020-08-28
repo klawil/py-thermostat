@@ -102,12 +102,42 @@ function getData() {
       currentData = data.data;
       showData();
     })
-    // .then(() => setTimeout(getData, 1000));
+    .then(() => setTimeout(getData, 1000));
 }
 getData();
 
 function getOutsideTemp() {
-  document.getElementById('outsideTemp').innerHTML = '25&deg;C';
+  const query = 'SELECT last("value") FROM "temp" WHERE ("type" = \'5N1\') AND time >= now() - 10m'; 
+
+  //  Encode and Interpolate the values
+  let url = `http://server.klawil.net:8086/query?q=${encodeURIComponent(query)}&db=wunderground`;
+  url = url.replace(/%20/g, "+");
+
+  let headers = new Headers();
+
+  // Set basic authorization header if neccessary
+  const username = 'thermostat';
+  const password = 'thermostat';
+  headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+  
+  startTime = new Date();
+
+  return fetch(url,
+  {
+    mode: 'cors',
+    method: 'get',
+    headers: headers
+  })
+    .then((r) => r.json())
+    .then((data) => {
+      const temp = Math.round(data.results[0].series[0].values[0][1]);
+      document.getElementById('outsideTemp').innerHTML = `${temp}&deg;C`;
+    })
+    .then(() => setTimeout(getOutsideTemp, 60000))
+    .catch((e) => {
+      console.error(e);
+      setTimeout(getOutsideTemp, 60000)
+    });
 }
 getOutsideTemp();
 
