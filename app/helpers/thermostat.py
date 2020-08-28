@@ -27,7 +27,7 @@ def update_rooms():
         timeout=0.5
       )
 
-      resp = r.json()
+      resp = r.json()['data']
     except requests.exceptions.Timeout:
       print('Timeout on {}'.format(room['ip']))
       resp = {
