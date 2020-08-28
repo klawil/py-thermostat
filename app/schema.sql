@@ -57,13 +57,12 @@ CREATE TABLE pins (
 );
 
 INSERT INTO rooms (name, ip) VALUES
-('Living Room', '192.168.85.6'),
+('Living Room', '127.0.0.1'),
 ('Bedroom', '192.168.85.8');
 
 INSERT INTO modes (name, targetRoom, tempMin, tempMax, defaultFan) VALUES
-('Sleeping', 'Bedroom', 16, 20, TRUE),
--- ('Awake', 'Bedroom', 16, 20, TRUE);
-('Awake', 'Living Room', 16, 20, TRUE);
+('Sleeping', 'Bedroom', 16, 20, FALSE),
+('Awake', 'Living Room', 16, 20, FALSE);
 
 INSERT INTO schedule(startTime, mode) VALUES
 (0, 'Sleeping'), -- Midnight
