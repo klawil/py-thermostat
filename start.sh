@@ -1,3 +1,3 @@
 #!/bin/bash
 
-waitress-serve --port=5000 --call 'app:create_app'
+waitress-serve --port=80 --call 'app:create_app'

@@ -48,7 +48,8 @@ CREATE TABLE currentState (
   fanLow BOOLEAN NOT NULL,
   fanHigh BOOLEAN NOT NULL,
   tempMin INTEGER,
-  tempMax INTEGER
+  tempMax INTEGER,
+  targetRoom TEXT
 );
 
 CREATE TABLE pins (
@@ -62,7 +63,7 @@ INSERT INTO rooms (name, ip) VALUES
 
 INSERT INTO modes (name, targetRoom, tempMin, tempMax, defaultFan) VALUES
 ('Sleeping', 'Bedroom', 16, 20, FALSE),
-('Awake', 'Living Room', 16, 20, FALSE);
+('Awake', 'Living Room', 20, 24, FALSE);
 
 INSERT INTO schedule(startTime, mode) VALUES
 (0, 'Sleeping'), -- Midnight

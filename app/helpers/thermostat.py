@@ -127,7 +127,8 @@ def get_desired_state(room_temps, target, current_state):
     'fanLow': True,
     'fanHigh': False,
     'tempMin': None,
-    'tempMax': None
+    'tempMax': None,
+    'targetRoom': None
   }
   if target is None:
     print('No target')
@@ -137,12 +138,14 @@ def get_desired_state(room_temps, target, current_state):
     print('Override')
     target['tempMin'] = current_state['tempMin']
     target['tempMax'] = current_state['tempMax']
+    target['targetRoom'] = None
     return target
   elif target['name'] == 'Override':
     target['defaultFan'] = False
 
   desiredState['tempMin'] = target['tempMin']
   desiredState['tempMax'] = target['tempMax']
+  desiredState['targetRoom'] = target['targetRoom']
 
   if target['targetRoom'] not in room_temps or room_temps[target['targetRoom']] is None:
     for room in room_temps:
@@ -193,14 +196,15 @@ def implement_state(new_state):
   db = get_db()
 
   # Save the state
-  db.execute('UPDATE currentState SET name = ?, ac = ?, heat = ?, fanLow = ?, fanHigh = ?, tempMin = ?, tempMax = ?', (
+  db.execute('UPDATE currentState SET name = ?, ac = ?, heat = ?, fanLow = ?, fanHigh = ?, tempMin = ?, tempMax = ?, targetRoom = ?', (
     new_state['name'],
     new_state['ac'],
     new_state['heat'],
     new_state['fanLow'],
     new_state['fanHigh'],
     new_state['tempMin'],
-    new_state['tempMax']
+    new_state['tempMax'],
+    new_state['targetRoom']
   ))
   db.commit()
 

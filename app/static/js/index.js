@@ -63,14 +63,14 @@ function showData() {
 
 
   currentData.rooms.forEach((room, index) => {
-    let currentTemp = Math.round(room.currentTemp);
-    // if (
-    //   room.currentTemp === null ||
-    //   room.currentTempTimestamp === null ||
-    //   Date.now() - room.currentTempTimestamp > (1000 * 60 * 10)
-    // ) {
-    //   currentTemp = '??';
-    // }
+    let currentTemp = (Math.round(room.currentTemp * 10) / 10).toFixed(1);
+    if (
+      room.currentTemp === null ||
+      room.currentTempTimestamp === null ||
+      Date.now() - room.currentTempTimestamp > (1000 * 60 * 10)
+    ) {
+      currentTemp = '??';
+    }
 
     document.getElementById(`room-name-${index}`).innerHTML = room.name;
     document.getElementById(`room-current-text-${index}`).innerHTML = `${currentTemp}&deg;C`;
@@ -84,10 +84,14 @@ function showData() {
     document.getElementById(`room-current-target-${index}`).innerHTML = `${currentData.tempMin} - ${currentData.tempMax}`;
 
     let minMarker = document.getElementById(`room-min-${index}`);
-    setCircle(currentData.tempMin, minMarker);
-
     let maxMarker = document.getElementById(`room-max-${index}`);
-    setCircle(currentData.tempMax, maxMarker);
+    if (currentData.targetRoom === room.name) {
+      setCircle(currentData.tempMin, minMarker);
+      setCircle(currentData.tempMax, maxMarker);
+    } else {
+      minMarker.hidden = true;
+      maxMarker.hidden = true;
+    }
   });
 }
 
