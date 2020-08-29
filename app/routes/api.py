@@ -37,7 +37,7 @@ def set_state():
   db = database.get_db()
 
   db.execute('UPDATE overrides SET isEnabled = 1, endsAt = ?, ac = ?, heat = ?, fanLow = ?, fanHigh = ?, tempMin = ?, tempMax = ?, targetRoom = ?', [
-    thermostat.get_current_timestamp() + (1000 * 60 * 60 * 6), # Valid for 6h
+    thermostat.get_current_timestamp() + (1000 * 60 * 60 * 1), # Valid for 1h
     request.form['ac'] == 'true',
     request.form['heat'] == 'true',
     request.form['fanLow'] == 'true',
@@ -68,7 +68,7 @@ def set_state_temp():
   db = database.get_db()
 
   db.execute('UPDATE overrides SET isEnabled = 1, endsAt = ?, ac = ?, heat = ?, fanLow = ?, fanHigh = ?, tempMin = ?, tempMax = ?, targetRoom = ?', [
-    thermostat.get_current_timestamp() + (1000 * 60 * 60 * 6), # Valid for 6h
+    thermostat.get_current_timestamp() + (1000 * 60 * 60 * 12), # Valid for 12h
     None,
     None,
     None,
