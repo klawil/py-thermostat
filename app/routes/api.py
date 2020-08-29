@@ -27,6 +27,9 @@ def get_current_state():
   state = db.execute('SELECT * FROM currentState').fetchone()
   state['rooms'] = db.execute('SELECT * FROM rooms').fetchall()
 
+  if state['name'] == 'Override':
+    state['override'] = db.execute('SELECT * FROM overrides').fetchone()
+
   return jsonify({
     'success': True,
     'data': state

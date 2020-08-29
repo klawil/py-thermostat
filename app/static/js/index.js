@@ -34,6 +34,12 @@ function setCircle(degrees, elem) {
 }
 
 function showData() {
+  let time = `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`;
+  let timeElem = document.getElementById('time');
+  if (timeElem.innerHTML !== time) {
+    timeElem.innerHTML = time;
+  }
+
   CONTROLS.forEach((item) => {
     let btn = document.getElementById(item);
     btn.isOn = currentData[item] === 1;
@@ -56,10 +62,25 @@ function showData() {
     btn.classList.add('btn-light');
   }
 
-  if (currentData.name !== 'Override' && currentData.name.indexOf('Schedule:') === -1) {
-    currentData.name = `Schedule: ${currentData.name}`;
+  let name = currentData.name;
+  if (name !== 'Override' && name.indexOf('Schedule:') === -1) {
+    name = `Schedule: ${name}`;
+  } else if (
+    name === 'Override' &&
+    typeof currentData.override !== 'undefined' &&
+    typeof currentData.override.endsAt !== 'undefined' &&
+    currentData.override.endsAt !== null
+  ) {
+    let timeLeft = currentData.override.endsAt - Date.now();
+    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+    timeLeft -= (hours * 1000 * 60 * 60);
+    let minutes = Math.floor(timeLeft / (1000 * 60));
+    timeLeft -= (minutes * 1000 * 60);
+    let seconds = Math.round(timeLeft / 1000);
+
+    name = `${name} (Time Remaining: ${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')})`;
   }
-  document.getElementById('mode').innerHTML = currentData.name;
+  document.getElementById('mode').innerHTML = name;
 
 
   currentData.rooms.forEach((room, index) => {
@@ -94,6 +115,7 @@ function showData() {
     }
   });
 }
+setInterval(showData, 100);
 
 function getData() {
   fetch('/api/state')
@@ -104,9 +126,12 @@ function getData() {
         return;
       }
       currentData = data.data;
-      showData();
     })
-    .then(() => setTimeout(getData, 1000));
+    .then(() => setTimeout(getData, 1000))
+    .catch((e) => {
+      console.error(e);
+      setTimeout(getOutsideTemp, 60000)
+    });
 }
 getData();
 
@@ -144,14 +169,6 @@ function getOutsideTemp() {
     });
 }
 getOutsideTemp();
-
-setInterval(() => {
-  let time = `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`;
-  let timeElem = document.getElementById('time');
-  if (timeElem.innerHTML !== time) {
-    timeElem.innerHTML = time;
-  }
-}, 100);
 
 CONTROLS.forEach((id) => {
   let elem = document.getElementById(id);
