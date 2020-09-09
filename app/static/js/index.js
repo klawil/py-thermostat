@@ -1,5 +1,6 @@
 const GAUGE_RADIUS = (200 / 2) - 3;
 const DOT_RADIUS = 12;
+const MIN_RANGE = 3;
 
 const CONTROLS = [
   'ac',
@@ -233,6 +234,7 @@ document.getElementById('override').addEventListener('click', () => fetch('/api/
 
 function changeTargetTemp(addValue, key, roomId) {
   let newTemps = new FormData();
+  let newTempsObj = {};
   newTemps.append('targetRoom', currentData.rooms[roomId].name);
   [
     'tempMin',
@@ -242,8 +244,19 @@ function changeTargetTemp(addValue, key, roomId) {
     if (tempKey === key) {
       value += addValue;
     }
+    newTempsObj[tempKey] = value;
     newTemps.append(tempKey, value);
   });
+
+  // Make sure that there is a range between min and max
+  const delta = newTempsObj.tempMax - newTempsObj.tempMin;
+  if (delta < MIN_RANGE) {
+    if (key === 'tempMin') {
+      newTemps.set('tempMax', newTempsObj.tempMin + MIN_RANGE);
+    } else {
+      newTemps.set('tempMin', newTempsObj.tempMax - MIN_RANGE);
+    }
+  }
 
   fetch('/api/state/temp', {
     method: 'POST',
