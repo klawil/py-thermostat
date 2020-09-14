@@ -160,6 +160,12 @@ def get_desired_state(room_temps, target, current_state):
 
   currentTemp = room_temps[target['targetRoom']]
 
+  # Modify the target to be 1 degree off of the range or the middle of the range
+  tempRange = target['tempMax'] - target['tempMin']
+  tempDeltaToActivate = 1
+  if tempRange <= 5:
+    tempDeltaToActivate = tempRange / 2
+
   if not target['defaultFan']:
     desiredState['fanLow'] = False
 
@@ -173,10 +179,10 @@ def get_desired_state(room_temps, target, current_state):
   elif currentTemp < (target['tempMin'] - 1):
     desiredState['heat'] = True
     desiredState['fanLow'] = False
-  elif current_state['ac'] and currentTemp > (target['tempMax'] - 1):
+  elif current_state['ac'] and currentTemp > (target['tempMax'] - tempDeltaToActivate):
     desiredState['ac'] = True
     desiredState['fanLow'] = True
-  elif current_state['heat'] and currentTemp < (target['tempMin'] + 1):
+  elif current_state['heat'] and currentTemp < (target['tempMin'] + tempDeltaToActivate):
     desiredState['heat'] = True
     desiredState['fanLow'] = False
 
