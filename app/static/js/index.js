@@ -1,6 +1,6 @@
 const GAUGE_RADIUS = (200 / 2) - 3;
 const DOT_RADIUS = 12;
-const MIN_RANGE = 3;
+const MIN_RANGE = 4;
 
 const CONTROLS = [
   'ac',

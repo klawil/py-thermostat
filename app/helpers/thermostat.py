@@ -169,14 +169,14 @@ def get_desired_state(room_temps, target, current_state):
   if not target['defaultFan']:
     desiredState['fanLow'] = False
 
-  if currentTemp > (target['tempMax'] + 5):
+  if currentTemp > (target['tempMax'] + 4):
     desiredState['ac'] = True
     desiredState['fanHigh'] = True
     desiredState['fanLow'] = False
-  elif currentTemp > (target['tempMax'] + 1):
+  elif currentTemp > target['tempMax']:
     desiredState['ac'] = True
     desiredState['fanLow'] = True
-  elif currentTemp < (target['tempMin'] - 1):
+  elif currentTemp < target['tempMin']:
     desiredState['heat'] = True
     desiredState['fanLow'] = False
   elif current_state['ac'] and currentTemp > (target['tempMax'] - tempDeltaToActivate):
